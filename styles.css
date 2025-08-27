@@ -1,0 +1,883 @@
+/* 全局樣式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* 背景裝飾 */
+.bg-decoration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.floating-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    animation: float 6s ease-in-out infinite;
+}
+
+.circle-1 {
+    width: 200px;
+    height: 200px;
+    top: 10%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.circle-2 {
+    width: 150px;
+    height: 150px;
+    top: 60%;
+    right: 15%;
+    animation-delay: 2s;
+}
+
+.circle-3 {
+    width: 100px;
+    height: 100px;
+    bottom: 20%;
+    left: 20%;
+    animation-delay: 4s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+/* 標題區域 */
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeInDown 1s ease-out;
+}
+
+.title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.title-icon {
+    font-size: 4rem;
+    animation: bounce 2s ease-in-out infinite;
+}
+
+.subtitle {
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 300;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+/* 卡片通用樣式 */
+.countdown-card,
+.checkin-card,
+.progress-card,
+.calendar-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    animation: slideInUp 0.8s ease-out;
+}
+
+.countdown-card:hover,
+.checkin-card:hover,
+.progress-card:hover,
+.calendar-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 倒數計時區域 */
+.countdown-section {
+    margin-bottom: 40px;
+}
+
+.countdown-title {
+    font-size: 1.8rem;
+    color: #4a5568;
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+.countdown-timer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.time-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.time-number {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #667eea;
+    text-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+    min-width: 80px;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.time-number.changing {
+    transform: scale(1.1);
+    color: #764ba2;
+}
+
+.time-label {
+    font-size: 1rem;
+    color: #718096;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.time-separator {
+    font-size: 2.5rem;
+    color: #a0aec0;
+    font-weight: 300;
+    margin-top: -20px;
+}
+
+.start-date {
+    text-align: center;
+    color: #718096;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* 簽到區域 */
+.checkin-section {
+    margin-bottom: 40px;
+}
+
+.checkin-title {
+    font-size: 1.8rem;
+    color: #4a5568;
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+.checkin-status {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.status-icon {
+    font-size: 3rem;
+    color: #48bb78;
+    margin-bottom: 15px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.status-text {
+    font-size: 1.2rem;
+    color: #4a5568;
+    font-weight: 500;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.checkin-btn {
+    width: 100%;
+    max-width: 300px;
+    height: 60px;
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    border: none;
+    border-radius: 30px;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 0 auto;
+    box-shadow: 0 10px 30px rgba(72, 187, 120, 0.3);
+}
+
+.checkin-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(72, 187, 120, 0.4);
+}
+
+.checkin-btn:active {
+    transform: translateY(0);
+}
+
+.checkin-btn.completed {
+    background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);
+    cursor: not-allowed;
+}
+
+/* 進度區域 */
+.progress-title {
+    font-size: 1.8rem;
+    color: #4a5568;
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+.progress-overview {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.progress-circle {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.progress-ring {
+    transform: rotate(-90deg);
+}
+
+.progress-ring-bg {
+    fill: none;
+    stroke: #e2e8f0;
+    stroke-width: 8;
+}
+
+.progress-ring-fill {
+    fill: none;
+    stroke: #667eea;
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 339.292;
+    stroke-dashoffset: 339.292;
+    transition: stroke-dashoffset 1s ease-in-out;
+}
+
+.progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.progress-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #667eea;
+}
+
+.progress-label {
+    font-size: 1.2rem;
+    color: #718096;
+    font-weight: 500;
+}
+
+.progress-info {
+    flex: 1;
+    min-width: 300px;
+}
+
+.week-progress h3 {
+    font-size: 1.3rem;
+    color: #4a5568;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.week-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.week-bar {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.bar-fill {
+    width: 200px;
+    height: 12px;
+    background: #e2e8f0;
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+}
+
+.bar-fill::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    border-radius: 6px;
+    width: 0%;
+    transition: width 1s ease-in-out;
+}
+
+.week-label {
+    font-size: 1rem;
+    color: #4a5568;
+    font-weight: 500;
+    min-width: 60px;
+}
+
+/* 日曆區域 */
+.calendar-title {
+    font-size: 1.8rem;
+    color: #4a5568;
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 12px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    background: #f7fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #4a5568;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    min-height: 60px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-day.weekday {
+    background: transparent;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #667eea;
+    cursor: default;
+    min-height: auto;
+    box-shadow: none;
+}
+
+.calendar-day.weekday:hover {
+    transform: none;
+    border-color: transparent;
+}
+
+/* 日历按钮样式 */
+.calendar-day-btn {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #4a5568;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.calendar-day-btn .day-number {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: inherit;
+}
+
+.calendar-day-btn .check-mark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #e53e3e;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    animation: checkIn 0.5s ease-out;
+    z-index: 2;
+    opacity: 0.9;
+}
+
+.calendar-day-btn:hover {
+    transform: translateY(-4px) scale(1.05);
+    border-color: #667eea;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.25);
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.calendar-day-btn:active {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+}
+
+.calendar-day-btn.checked {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    border-color: #48bb78;
+    color: white;
+    animation: checkIn 0.5s ease-out;
+    box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+}
+
+.calendar-day-btn.checked .day-number {
+    color: #4a5568;
+    opacity: 0.7;
+}
+
+.calendar-day-btn.checked .check-mark {
+    color: #e53e3e;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.calendar-day-btn.future {
+    background: linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);
+    color: #a0aec0;
+    cursor: not-allowed;
+    position: relative;
+    border-color: #cbd5e0;
+}
+
+.calendar-day-btn.future::before {
+    content: '🔒';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.2rem;
+    opacity: 0;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.calendar-day-btn.future:hover::before {
+    opacity: 1;
+    animation: shake 0.5s ease-in-out;
+}
+
+.calendar-day-btn.future:hover {
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    border-color: #a0aec0;
+    transform: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* 今天日期样式 */
+.calendar-day-btn.today {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: #667eea;
+    color: white;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    position: relative;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.calendar-day-btn.today::before {
+    content: '🌟';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.2rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* 过去日期样式 */
+.calendar-day-btn.past {
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    color: #4a5568;
+    cursor: pointer;
+    position: relative;
+    border-color: #cbd5e0;
+}
+
+.calendar-day-btn.past:hover {
+    background: linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);
+    border-color: #a0aec0;
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* 可删除的日期样式 */
+.calendar-day-btn.deletable {
+    position: relative;
+}
+
+.calendar-day-btn.deletable:hover {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(72, 187, 120, 0.3);
+}
+
+/* 删除按钮样式 */
+.calendar-delete-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 24px;
+    height: 24px;
+    background: rgba(239, 68, 68, 0.95);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.calendar-delete-btn:hover {
+    background: rgba(239, 68, 68, 1);
+    transform: scale(1.2);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
+}
+
+/* 删除按钮显示时的动画 */
+.calendar-day-btn.deletable:hover .calendar-delete-btn {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+@keyframes checkIn {
+    0% {
+        transform: translate(-50%, -50%) scale(0.3);
+        opacity: 0;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.9;
+    }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+    25% { transform: translate(-50%, -50%) rotate(-5deg); }
+    75% { transform: translate(-50%, -50%) rotate(5deg); }
+}
+
+/* 完成特效 */
+.completion-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.completion-overlay.show {
+    display: flex;
+}
+
+.completion-content {
+    text-align: center;
+    color: white;
+    animation: zoomIn 0.5s ease-out;
+}
+
+.completion-icon {
+    font-size: 5rem;
+    margin-bottom: 20px;
+    animation: celebration 2s ease-in-out infinite;
+}
+
+.completion-title {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    font-weight: 700;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.completion-message {
+    font-size: 1.3rem;
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes celebration {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(1.1) rotate(-5deg); }
+    50% { transform: scale(1.2) rotate(0deg); }
+    75% { transform: scale(1.1) rotate(5deg); }
+}
+
+/* 煙火特效 */
+.fireworks {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.firework {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    animation: firework 2s ease-out infinite;
+}
+
+.firework:nth-child(1) {
+    background: #ff6b6b;
+    top: 20%;
+    left: 20%;
+    animation-delay: 0s;
+}
+
+.firework:nth-child(2) {
+    background: #4ecdc4;
+    top: 30%;
+    right: 20%;
+    animation-delay: 0.4s;
+}
+
+.firework:nth-child(3) {
+    background: #45b7d1;
+    bottom: 30%;
+    left: 30%;
+    animation-delay: 0.8s;
+}
+
+.firework:nth-child(4) {
+    background: #96ceb4;
+    bottom: 20%;
+    right: 30%;
+    animation-delay: 1.2s;
+}
+
+.firework:nth-child(5) {
+    background: #feca57;
+    top: 50%;
+    left: 50%;
+    animation-delay: 1.6s;
+}
+
+@keyframes firework {
+    0% {
+        transform: scale(0) translateY(0);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1) translateY(-100px);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0) translateY(-200px);
+        opacity: 0;
+    }
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .title {
+        font-size: 2.5rem;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .title-icon {
+        font-size: 3rem;
+    }
+    
+    .subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .countdown-timer {
+        gap: 15px;
+    }
+    
+    .time-number {
+        font-size: 2.5rem;
+        min-width: 60px;
+    }
+    
+    .time-separator {
+        font-size: 2rem;
+        margin-top: -15px;
+    }
+    
+    .progress-overview {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .week-bars {
+        gap: 12px;
+    }
+    
+    .bar-fill {
+        width: 150px;
+    }
+    
+    .calendar-grid {
+        gap: 6px;
+        max-width: 400px;
+    }
+    
+    .calendar-day {
+        font-size: 1rem;
+    }
+    
+    .completion-title {
+        font-size: 2rem;
+    }
+    
+    .completion-icon {
+        font-size: 3.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .countdown-timer {
+        gap: 10px;
+    }
+    
+    .time-number {
+        font-size: 2rem;
+        min-width: 50px;
+    }
+    
+    .time-label {
+        font-size: 0.9rem;
+    }
+    
+    .calendar-grid {
+        gap: 4px;
+        max-width: 350px;
+    }
+    
+    .calendar-day {
+        font-size: 0.9rem;
+    }
+}

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三週簽到挑戰</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 背景裝飾 -->
+        <div class="bg-decoration">
+            <div class="floating-circle circle-1"></div>
+            <div class="floating-circle circle-2"></div>
+            <div class="floating-circle circle-3"></div>
+        </div>
+
+        <!-- 標題區域 -->
+        <header class="header">
+            <h1 class="title">
+                <span class="title-icon">🎯</span>
+                三週簽到挑戰
+            </h1>
+            <p class="subtitle">堅持21天，解鎖獎勵</p>
+        </header>
+
+        <!-- 倒數計時區域 -->
+        <section class="countdown-section">
+            <div class="countdown-card">
+                <h2 class="countdown-title">距離下次簽到還有</h2>
+                <div class="countdown-timer">
+                    <div class="time-unit">
+                        <span class="time-number" id="days">00</span>
+                        <span class="time-label">天</span>
+                    </div>
+                    <div class="time-separator">:</div>
+                    <div class="time-unit">
+                        <span class="time-number" id="hours">00</span>
+                        <span class="time-label">時</span>
+                    </div>
+                    <div class="time-separator">:</div>
+                    <div class="time-unit">
+                        <span class="time-number" id="minutes">00</span>
+                        <span class="time-label">分</span>
+                    </div>
+                    <div class="time-separator">:</div>
+                    <div class="time-unit">
+                        <span class="time-number" id="seconds">00</span>
+                        <span class="time-label">秒</span>
+                    </div>
+                </div>
+                <div class="start-date">每日凌晨00:00重置簽到</div>
+            </div>
+        </section>
+
+        <!-- 簽到區域 -->
+        <section class="checkin-section" id="checkinSection" style="display: none;">
+            <div class="checkin-card">
+                <h2 class="checkin-title">今日簽到</h2>
+                <div class="checkin-status">
+                    <div class="status-icon" id="statusIcon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <p class="status-text" id="statusText">準備開始您的挑戰之旅！</p>
+                </div>
+                <button class="checkin-btn" id="checkinBtn">
+                    <span class="btn-text">立即簽到</span>
+                    <i class="fas fa-check"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- 進度區域 -->
+        <section class="progress-section">
+            <div class="progress-card">
+                <h2 class="progress-title">挑戰進度</h2>
+                <div class="progress-overview">
+                    <div class="progress-circle">
+                        <svg class="progress-ring" width="120" height="120">
+                            <circle class="progress-ring-bg" cx="60" cy="60" r="54"></circle>
+                            <circle class="progress-ring-fill" cx="60" cy="60" r="54" id="progressRing"></circle>
+                        </svg>
+                        <div class="progress-text">
+                            <span class="progress-number" id="progressNumber">0</span>
+                            <span class="progress-label">/21</span>
+                        </div>
+                    </div>
+                    <div class="progress-info">
+                        <div class="week-progress">
+                            <h3>週進度</h3>
+                            <div class="week-bars">
+                                <div class="week-bar" data-week="1">
+                                    <div class="bar-fill" id="week1Fill"></div>
+                                    <span class="week-label">第1週</span>
+                                </div>
+                                <div class="week-bar" data-week="2">
+                                    <div class="bar-fill" id="week2Fill"></div>
+                                    <span class="week-label">第2週</span>
+                                </div>
+                                <div class="week-bar" data-week="3">
+                                    <div class="bar-fill" id="week3Fill"></div>
+                                    <span class="week-label">第3週</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 日曆區域 -->
+        <section class="calendar-section">
+            <div class="calendar-card">
+                <h2 class="calendar-title">簽到日曆</h2>
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- 日曆格子將由JavaScript動態生成 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 完成特效 -->
+        <div class="completion-overlay" id="completionOverlay">
+            <div class="completion-content">
+                <div class="completion-icon">🎉</div>
+                <h2 class="completion-title">恭喜完成！</h2>
+                <p class="completion-message">您成功完成了三週簽到挑戰！</p>
+                <div class="fireworks">
+                    <div class="firework"></div>
+                    <div class="firework"></div>
+                    <div class="firework"></div>
+                    <div class="firework"></div>
+                    <div class="firework"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
