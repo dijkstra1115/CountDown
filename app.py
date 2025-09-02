@@ -12,6 +12,9 @@ app = FastAPI(title="三週簽到挑戰", description="一個美觀的簽到挑�
 # 數據文件路徑
 DATA_FILE = "checkin_data.json"
 
+# 補簽到密碼（您可以修改這個密碼）
+RETROACTIVE_PASSWORD = "ruru7749"
+
 # 數據模型
 class CheckinRequest(BaseModel):
     date: str
@@ -19,6 +22,11 @@ class CheckinRequest(BaseModel):
 
 class CheckinUpdate(BaseModel):
     data: Dict[str, Any]
+
+class RetroactiveCheckinRequest(BaseModel):
+    date: str
+    password: str
+    timestamp: int
 
 # 確保數據文件存在
 def ensure_data_file():
@@ -105,6 +113,45 @@ async def reset_checkin_data():
         return {"success": True, "message": "數據重置成功"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"重置數據失敗: {str(e)}")
+
+# 補簽到功能
+@app.post("/api/checkin/retroactive")
+async def retroactive_checkin(request: RetroactiveCheckinRequest):
+    """補簽到功能（需要密碼驗證）"""
+    try:
+        # 驗證密碼
+        if request.password != RETROACTIVE_PASSWORD:
+            raise HTTPException(status_code=401, detail="密碼錯誤，無權限進行補簽到")
+        
+        data = read_data()
+        
+        # 檢查是否已經簽到
+        if request.date in data:
+            raise HTTPException(status_code=400, detail=f"第{request.date}天已經簽到過了！")
+        
+        # 驗證日期範圍（1-21天）
+        day_number = int(request.date)
+        if day_number < 1 or day_number > 21:
+            raise HTTPException(status_code=400, detail="日期範圍錯誤，只能補簽第1-21天")
+        
+        # 添加補簽到記錄
+        data[request.date] = {
+            "timestamp": request.timestamp,
+            "date": request.date,
+            "created_at": datetime.now().isoformat(),
+            "is_retroactive": True  # 標記為補簽到
+        }
+        
+        # 保存數據
+        write_data(data)
+        
+        return {"success": True, "data": data, "message": f"第{request.date}天補簽到成功！"}
+    except HTTPException:
+        raise
+    except ValueError:
+        raise HTTPException(status_code=400, detail="日期格式錯誤")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"補簽到失敗: {str(e)}")
 
 # 獲取簽到統計
 @app.get("/api/checkin/stats")

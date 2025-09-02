@@ -69,6 +69,10 @@
                     <span class="btn-text">立即簽到</span>
                     <i class="fas fa-check"></i>
                 </button>
+                <button class="retroactive-btn" id="retroactiveBtn">
+                    <span class="btn-text">補簽到</span>
+                    <i class="fas fa-history"></i>
+                </button>
             </div>
         </section>
 
@@ -119,6 +123,34 @@
                 </div>
             </div>
         </section>
+
+        <!-- 補簽到模态框 -->
+        <div class="modal-overlay" id="retroactiveModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">補簽到</h3>
+                    <button class="modal-close" id="modalClose">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="retroactiveDay">選擇要補簽的天數：</label>
+                        <select id="retroactiveDay" class="form-select">
+                            <option value="">請選擇天數</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="retroactivePassword">輸入密碼：</label>
+                        <input type="password" id="retroactivePassword" class="form-input" placeholder="請輸入補簽到密碼">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-cancel" id="modalCancel">取消</button>
+                    <button class="btn-confirm" id="modalConfirm">確認補簽到</button>
+                </div>
+            </div>
+        </div>
 
         <!-- 完成特效 -->
         <div class="completion-overlay" id="completionOverlay">

@@ -11,6 +11,7 @@ const minutesEl = document.getElementById('minutes');
 const secondsEl = document.getElementById('seconds');
 const checkinSection = document.getElementById('checkinSection');
 const checkinBtn = document.getElementById('checkinBtn');
+const retroactiveBtn = document.getElementById('retroactiveBtn');
 const statusIcon = document.getElementById('statusIcon');
 const statusText = document.getElementById('statusText');
 const progressNumber = document.getElementById('progressNumber');
@@ -20,6 +21,14 @@ const week2Fill = document.getElementById('week2Fill');
 const week3Fill = document.getElementById('week3Fill');
 const calendarGrid = document.getElementById('calendarGrid');
 const completionOverlay = document.getElementById('completionOverlay');
+
+// 補簽到相關元素
+const retroactiveModal = document.getElementById('retroactiveModal');
+const modalClose = document.getElementById('modalClose');
+const modalCancel = document.getElementById('modalCancel');
+const modalConfirm = document.getElementById('modalConfirm');
+const retroactiveDay = document.getElementById('retroactiveDay');
+const retroactivePassword = document.getElementById('retroactivePassword');
 
 // 初始化
 document.addEventListener('DOMContentLoaded', async function() {
@@ -62,6 +71,24 @@ async function initializeApp() {
     
     // 綁定簽到按鈕事件
     checkinBtn.addEventListener('click', handleCheckin);
+    
+    // 綁定補簽到按鈕事件
+    retroactiveBtn.addEventListener('click', showRetroactiveModal);
+    
+    // 綁定模态框事件
+    modalClose.addEventListener('click', hideRetroactiveModal);
+    modalCancel.addEventListener('click', hideRetroactiveModal);
+    modalConfirm.addEventListener('click', handleRetroactiveCheckin);
+    
+    // 點擊模态框背景關閉
+    retroactiveModal.addEventListener('click', (e) => {
+        if (e.target === retroactiveModal) {
+            hideRetroactiveModal();
+        }
+    });
+    
+    // 初始化補簽到選項
+    initializeRetroactiveOptions();
 }
 
 // 倒數計時功能
@@ -268,8 +295,17 @@ function generateCalendar() {
         // 檢查是否已簽到
         if (checkinData[dayNumber.toString()]) {
             dayElement.classList.add('checked');
-            // 添加签到标记（叉叉）
-            dayElement.innerHTML = `<span class="day-number">${dayNumber}</span><span class="check-mark">✗</span>`;
+            
+            // 檢查是否為補簽到
+            const isRetroactive = checkinData[dayNumber.toString()].is_retroactive;
+            if (isRetroactive) {
+                dayElement.classList.add('retroactive');
+                // 補簽到標記（橙色圓點）
+                dayElement.innerHTML = `<span class="day-number">${dayNumber}</span><span class="retroactive-mark">●</span>`;
+            } else {
+                // 正常簽到標記（叉叉）
+                dayElement.innerHTML = `<span class="day-number">${dayNumber}</span><span class="check-mark">✗</span>`;
+            }
         } else {
             dayElement.innerHTML = `<span class="day-number">${dayNumber}</span>`;
         }
@@ -351,8 +387,17 @@ function updateCalendar() {
         // 检查是否已签到
         if (checkinData[dayNumber]) {
             dayElement.classList.add('checked');
-            // 添加签到标记（叉叉）
-            dayElement.innerHTML = `<span class="day-number">${dayNumber}</span><span class="check-mark">✗</span>`;
+            
+            // 檢查是否為補簽到
+            const isRetroactive = checkinData[dayNumber].is_retroactive;
+            if (isRetroactive) {
+                dayElement.classList.add('retroactive');
+                // 補簽到標記（橙色圓點）
+                dayElement.innerHTML = `<span class="day-number">${dayNumber}</span><span class="retroactive-mark">●</span>`;
+            } else {
+                // 正常簽到標記（叉叉）
+                dayElement.innerHTML = `<span class="day-number">${dayNumber}</span><span class="check-mark">✗</span>`;
+            }
             
             // 为非今天且已签到的日期添加删除功能
             if (!isToday) {
@@ -656,4 +701,161 @@ async function deleteCheckin(dateString) {
         console.error('删除签到记录失败:', error);
         showNotification('删除失败，请重试', 'warning');
     }
+}
+
+// 初始化補簽到選項
+function initializeRetroactiveOptions() {
+    retroactiveDay.innerHTML = '<option value="">請選擇天數</option>';
+    
+    // 添加1-21天的選項，但只顯示未簽到的天數
+    for (let i = 1; i <= totalDays; i++) {
+        if (!checkinData[i.toString()]) {
+            const option = document.createElement('option');
+            option.value = i.toString();
+            option.textContent = `第${i}天`;
+            retroactiveDay.appendChild(option);
+        }
+    }
+}
+
+// 顯示補簽到模态框
+function showRetroactiveModal() {
+    // 重新初始化選項
+    initializeRetroactiveOptions();
+    
+    // 清空密碼輸入框
+    retroactivePassword.value = '';
+    
+    // 顯示模态框
+    retroactiveModal.classList.add('show');
+    
+    // 禁用確認按鈕直到選擇天數和輸入密碼
+    modalConfirm.disabled = true;
+    
+    // 監聽輸入變化
+    retroactiveDay.addEventListener('change', validateRetroactiveForm);
+    retroactivePassword.addEventListener('input', validateRetroactiveForm);
+}
+
+// 隱藏補簽到模态框
+function hideRetroactiveModal() {
+    retroactiveModal.classList.remove('show');
+    
+    // 移除事件監聽器
+    retroactiveDay.removeEventListener('change', validateRetroactiveForm);
+    retroactivePassword.removeEventListener('input', validateRetroactiveForm);
+}
+
+// 驗證補簽到表單
+function validateRetroactiveForm() {
+    const hasDay = retroactiveDay.value !== '';
+    const hasPassword = retroactivePassword.value.trim() !== '';
+    modalConfirm.disabled = !(hasDay && hasPassword);
+}
+
+// 處理補簽到
+async function handleRetroactiveCheckin() {
+    const selectedDay = retroactiveDay.value;
+    const password = retroactivePassword.value.trim();
+    
+    if (!selectedDay || !password) {
+        showNotification('請選擇天數並輸入密碼', 'warning');
+        return;
+    }
+    
+    // 禁用確認按鈕防止重複提交
+    modalConfirm.disabled = true;
+    modalConfirm.textContent = '處理中...';
+    
+    try {
+        const response = await fetch('/api/checkin/retroactive', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                date: selectedDay,
+                password: password,
+                timestamp: new Date().getTime()
+            })
+        });
+        
+        if (response.ok) {
+            const result = await response.json();
+            checkinData = result.data;
+            
+            // 更新UI
+            updateCheckinStatus();
+            updateProgress();
+            updateCalendar();
+            
+            // 隱藏模态框
+            hideRetroactiveModal();
+            
+            // 顯示成功通知
+            showNotification(result.message, 'success');
+            
+            // 補簽到成功動畫
+            animateRetroactiveSuccess();
+            
+            // 檢查是否完成挑戰
+            if (Object.keys(checkinData).length >= totalDays) {
+                setTimeout(showCompletionEffect, 1000);
+            }
+        } else {
+            const error = await response.json();
+            showNotification(error.detail || '補簽到失敗', 'warning');
+        }
+    } catch (error) {
+        console.error('補簽到錯誤:', error);
+        showNotification('補簽到失敗，請檢查網絡連接', 'warning');
+    } finally {
+        // 恢復按鈕狀態
+        modalConfirm.disabled = false;
+        modalConfirm.textContent = '確認補簽到';
+    }
+}
+
+// 補簽到成功動畫
+function animateRetroactiveSuccess() {
+    // 添加特殊的補簽到成功效果
+    const successOverlay = document.createElement('div');
+    successOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(237, 137, 54, 0.1);
+        z-index: 999;
+        pointer-events: none;
+        animation: retroactiveSuccess 2s ease-out forwards;
+    `;
+    
+    document.body.appendChild(successOverlay);
+    
+    // 添加CSS動畫
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes retroactiveSuccess {
+            0% {
+                opacity: 0;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1);
+            }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    setTimeout(() => {
+        document.body.removeChild(successOverlay);
+        document.head.removeChild(style);
+    }, 2000);
 }
