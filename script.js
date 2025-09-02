@@ -1,8 +1,22 @@
 // 全局變數
-const startDate = new Date('2025-08-27T00:00:00');
+const startDate = new Date('2025-08-27T04:00:00'); // 從4:00開始計算
 const totalDays = 21; // 三週 = 21天
 let checkinData = {};
 let currentProgress = 0;
+
+// 計算今天是第幾天（統一函數）
+function getTodayDayNumber() {
+    const now = new Date();
+    const daysSinceStart = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
+    return daysSinceStart + 1; // 返回第幾天（從1開始）
+}
+
+// 計算今天是第幾天（從0開始的索引）
+function getTodayDayIndex() {
+    const now = new Date();
+    const daysSinceStart = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
+    return daysSinceStart; // 返回索引（從0開始）
+}
 
 // DOM 元素
 const daysEl = document.getElementById('days');
@@ -146,12 +160,7 @@ function updateTimeDisplay(element, newValue, type) {
 
 // 處理簽到
 async function handleCheckin() {
-    const now = new Date();
-    const startDate = new Date('2025-08-27T04:00:00'); // 從4:00開始計算
-    
-    // 計算從開始日期到現在的天數（以4:00為界）
-    const daysSinceStart = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
-    const todayDayNumber = (daysSinceStart + 1).toString();
+    const todayDayNumber = getTodayDayNumber().toString();
     
     if (checkinData[todayDayNumber]) {
         showNotification('今天已經簽到過了！', 'info');
@@ -198,10 +207,7 @@ async function handleCheckin() {
 
 // 更新簽到狀態
 function updateCheckinStatus() {
-    const now = new Date();
-    const startDate = new Date('2025-08-27T04:00:00'); // 從4:00開始計算
-    const daysSinceStart = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
-    const todayDayNumber = (daysSinceStart + 1).toString();
+    const todayDayNumber = getTodayDayNumber().toString();
     const hasCheckedIn = checkinData[todayDayNumber];
     
     if (hasCheckedIn) {
@@ -325,14 +331,12 @@ function generateCalendar() {
         }
         
         // 檢查是否為今天（以4:00為界）
-        const now = new Date();
-        const startDate = new Date('2025-08-27T04:00:00'); // 從4:00開始計算
-        const daysSinceStart = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
-        const isToday = daysSinceStart === i;
+        const todayIndex = getTodayDayIndex();
+        const isToday = todayIndex === i; // i 是從0開始的索引
         
         if (isToday) {
             dayElement.classList.add('today');
-        } else if (i > daysSinceStart) {
+        } else if (i > todayIndex) {
             dayElement.classList.add('future');
         } else {
             dayElement.classList.add('past');
@@ -385,14 +389,12 @@ function updateCalendar() {
         dayElement.classList.remove('checked', 'future', 'today', 'past', 'deletable');
         
         // 检查是否为今天（以4:00为界）
-        const now = new Date();
-        const startDate = new Date('2025-08-27T04:00:00'); // 從4:00開始計算
-        const daysSinceStart = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
-        const isToday = daysSinceStart === parseInt(dayNumber) - 1;
+        const todayIndex = getTodayDayIndex();
+        const isToday = todayIndex === (parseInt(dayNumber) - 1); // dayNumber是從1開始，轉換為從0開始的索引
         
         if (isToday) {
             dayElement.classList.add('today');
-        } else if (parseInt(dayNumber) - 1 > daysSinceStart) {
+        } else if (parseInt(dayNumber) - 1 > todayIndex) {
             dayElement.classList.add('future');
         } else {
             dayElement.classList.add('past');
