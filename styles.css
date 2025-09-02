@@ -553,27 +553,9 @@ body {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.calendar-day-btn .retroactive-mark {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #ed8936;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    animation: checkIn 0.5s ease-out;
-    z-index: 2;
-}
-
 .calendar-day-btn.retroactive {
     background: linear-gradient(135deg, rgba(237, 137, 54, 0.1) 0%, rgba(221, 107, 32, 0.1) 100%);
     border: 2px solid rgba(237, 137, 54, 0.3);
-}
-
-.calendar-day-btn.retroactive .retroactive-mark {
-    color: #ed8936;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .calendar-day-btn.future {

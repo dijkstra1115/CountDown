@@ -314,8 +314,8 @@ function generateCalendar() {
             const isRetroactive = checkinData[dayNumber.toString()].is_retroactive;
             if (isRetroactive) {
                 dayElement.classList.add('retroactive');
-                // 補簽到標記（橙色圓點）
-                dayElement.innerHTML = `<span class="day-number">${dayNumber}</span><span class="retroactive-mark">●</span>`;
+                // 補簽到標記（與正常簽到相同的叉叉）
+                dayElement.innerHTML = `<span class="day-number">${dayNumber}</span><span class="check-mark">✗</span>`;
             } else {
                 // 正常簽到標記（叉叉）
                 dayElement.innerHTML = `<span class="day-number">${dayNumber}</span><span class="check-mark">✗</span>`;
@@ -406,8 +406,8 @@ function updateCalendar() {
             const isRetroactive = checkinData[dayNumber].is_retroactive;
             if (isRetroactive) {
                 dayElement.classList.add('retroactive');
-                // 補簽到標記（橙色圓點）
-                dayElement.innerHTML = `<span class="day-number">${dayNumber}</span><span class="retroactive-mark">●</span>`;
+                // 補簽到標記（與正常簽到相同的叉叉）
+                dayElement.innerHTML = `<span class="day-number">${dayNumber}</span><span class="check-mark">✗</span>`;
             } else {
                 // 正常簽到標記（叉叉）
                 dayElement.innerHTML = `<span class="day-number">${dayNumber}</span><span class="check-mark">✗</span>`;
