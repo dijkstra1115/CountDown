@@ -595,22 +595,34 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// 定期保存數據
+// 定期保存數據 - 修复数据竞争问题
+let lastSavedData = JSON.stringify(checkinData);
 setInterval(async () => {
     try {
-        await fetch('/api/checkin', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                data: checkinData
-            })
-        });
+        const currentData = JSON.stringify(checkinData);
+        // 只有数据发生变化时才保存
+        if (currentData !== lastSavedData) {
+            const response = await fetch('/api/checkin', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    data: checkinData
+                })
+            });
+            
+            if (response.ok) {
+                lastSavedData = currentData;
+                console.log('數據同步成功');
+            } else {
+                console.error('數據同步失敗:', response.status);
+            }
+        }
     } catch (error) {
         console.error('保存數據失敗:', error);
     }
-}, 30000); // 每30秒保存一次
+}, 30000); // 每30秒檢查一次
 
 // 添加鍵盤快捷鍵支持
 document.addEventListener('keydown', function(e) {
