@@ -46,9 +46,9 @@ def read_data() -> Dict[str, Any]:
 # 寫入數據
 def write_data(data: Dict[str, Any]):
     ensure_data_file()
+    temp_file = DATA_FILE + '.tmp'
     try:
         # 先寫入臨時文件，然後重命名，確保原子性
-        temp_file = DATA_FILE + '.tmp'
         with open(temp_file, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
         
@@ -137,6 +137,35 @@ async def reset_checkin_data():
         return {"success": True, "message": "數據重置成功"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"重置數據失敗: {str(e)}")
+
+# 刪除單個簽到記錄
+@app.delete("/api/checkin/{date}")
+async def delete_checkin_record(date: str):
+    """刪除指定日期的簽到記錄"""
+    try:
+        print(f"收到刪除請求: 日期={date}")
+        
+        data = read_data()
+        print(f"當前數據: {data}")
+        
+        if date not in data:
+            print(f"第{date}天沒有簽到記錄")
+            raise HTTPException(status_code=404, detail=f"第{date}天沒有簽到記錄")
+        
+        # 刪除指定日期的記錄
+        del data[date]
+        print(f"刪除第{date}天的記錄")
+        
+        # 保存數據
+        write_data(data)
+        print("數據保存成功")
+        
+        return {"success": True, "data": data, "message": f"第{date}天簽到記錄已刪除"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"刪除記錄失敗: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"刪除記錄失敗: {str(e)}")
 
 # 補簽到功能
 @app.post("/api/checkin/retroactive")

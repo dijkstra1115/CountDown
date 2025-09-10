@@ -595,7 +595,10 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// 定期保存數據 - 修复数据竞争问题
+// 定期保存數據 - 完全禁用定期保存，避免数据覆盖
+// 注释掉定期保存机制，因为补签到API已经直接保存数据
+// 定期保存会导致数据竞争和覆盖问题
+/*
 let lastSavedData = JSON.stringify(checkinData);
 setInterval(async () => {
     try {
@@ -623,6 +626,7 @@ setInterval(async () => {
         console.error('保存數據失敗:', error);
     }
 }, 30000); // 每30秒檢查一次
+*/
 
 // 添加鍵盤快捷鍵支持
 document.addEventListener('keydown', function(e) {
@@ -705,26 +709,28 @@ window.addEventListener('online', function() {
 // 删除签到记录
 async function deleteCheckin(dateString) {
     try {
-        // 从本地数据中删除
-        delete checkinData[dateString];
-        
-        // 更新UI
-        updateCheckinStatus();
-        updateProgress();
-        updateCalendar();
-        
-        // 同步到服务器
-        await fetch('/api/checkin', {
-            method: 'PUT',
+        // 先同步到服务器删除
+        const response = await fetch(`/api/checkin/${dateString}`, {
+            method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                data: checkinData
-            })
+            }
         });
         
-        showNotification('签到记录已删除', 'success');
+        if (response.ok) {
+            // 服务器删除成功后，从本地数据中删除
+            delete checkinData[dateString];
+            
+            // 更新UI
+            updateCheckinStatus();
+            updateProgress();
+            updateCalendar();
+            
+            showNotification('签到记录已删除', 'success');
+        } else {
+            const error = await response.json();
+            showNotification(error.detail || '删除失败', 'warning');
+        }
     } catch (error) {
         console.error('删除签到记录失败:', error);
         showNotification('删除失败，请重试', 'warning');
